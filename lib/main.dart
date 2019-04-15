@@ -12,6 +12,7 @@ const kShrineSurfaceWhite = const Color(0xFFFFFBFA);
 const kShrineBackgroundWhite = Colors.white;
 
 final ThemeData _kShrineTheme = _buildShrineTheme();
+double _offset = 0;
 
 TextTheme _buildShrineTextTheme(TextTheme base) {
   return base
@@ -75,6 +76,85 @@ class PlaceholderWidget extends StatelessWidget {
   }
 }
 
+class _lol extends State<lashFinder> {
+  ScrollController _controller;
+
+  void initState() {
+    _controller = ScrollController(initialScrollOffset: _offset)
+      ..addListener(() {
+        setState(() {
+          _offset = _controller.offset;
+        });
+      });
+    super.initState();
+  }
+
+  static List<Card> _buildGridCards(int count) {
+    List<Card> cards = List.generate(
+      count,
+      (int index) => Card(
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                AspectRatio(
+                  aspectRatio: 11.0 / 11.0,
+                  child: Image.asset(
+                    'assets/images/kim-kardashian.jpg',
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+//            Padding(
+//              padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
+//              child: Column(
+//                crossAxisAlignment: CrossAxisAlignment.start,
+//                children: <Widget>[
+//                  Text('Title'),
+//                  SizedBox(height: 8.0),
+//                  Text('Secondary Text'),
+//                ],
+//              ),
+//            ),
+              ],
+            ),
+          ),
+    );
+
+    return cards;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+//            IconButton(
+//              icon: Icon(Icons.search),
+//            ),
+            IconButton(
+              icon: Icon(Icons.format_list_bulleted),
+            ),
+          ],
+        ),
+        new Expanded(child: GridView.count(
+          controller: _controller,
+          crossAxisCount: 2,
+          padding: EdgeInsets.all(2.0),
+          childAspectRatio: 9.0 / 9.0,
+          // TODO: Build a grid of cards (102)
+          children: _buildGridCards(10),
+        )),
+      ],
+    );
+  }
+}
+
+class lashFinder extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _lol();
+}
+
 class MyLoginPage extends StatefulWidget {
   MyLoginPage({Key key, this.title}) : super(key: key);
 
@@ -87,15 +167,6 @@ class MyLoginPage extends StatefulWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -104,6 +175,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
+  bool flag = true;
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -111,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final List<Widget> _children = [
-    PlaceholderWidget(Colors.white),
+    lashFinder(),
     PlaceholderWidget(Colors.deepOrange),
 //    PlaceholderWidget(Colors.green),
     PlaceholderWidget(Colors.pink),
@@ -123,9 +195,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return new Scaffold(
         key: new GlobalKey<ScaffoldState>(),
         appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: kShrineBrown900
-          ),
+          iconTheme: IconThemeData(color: kShrineBrown900),
           centerTitle: true,
           title: Text("LashMe"),
           actions: <Widget>[
@@ -133,7 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.shopping_cart),
             )
           ],
-        ), // This trailing comma makes auto-formatting nicer for build methods.
+        ),
         body: _children[_currentIndex], // new
         bottomNavigationBar: new BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
@@ -147,7 +217,8 @@ class _MyHomePageState extends State<MyHomePage> {
 //              BottomNavigationBarItem(
 //                  icon: Icon(Icons.add_box), title: new Text("Add")),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.calendar_today), title: Text("Appointments")),
+                  icon: Icon(Icons.calendar_today),
+                  title: Text("Appointments")),
               BottomNavigationBarItem(
                   icon: Icon(Icons.person),
                   //data: IconThemeData(color: Colors.grey.shade600)),
@@ -176,8 +247,6 @@ class _MyLoginPage extends State<MyLoginPage> {
               ],
             ),
             SizedBox(height: 120.0),
-            // TODO: Wrap Username with AccentColorOverride (103)
-            // TODO: Remove filled: true values (103)
             TextField(
               controller: _usernameController,
               decoration: InputDecoration(
@@ -186,7 +255,6 @@ class _MyLoginPage extends State<MyLoginPage> {
               ),
             ),
             SizedBox(height: 12.0),
-            // TODO: Wrap Password with AccentColorOverride (103)
             TextField(
               controller: _passwordController,
               decoration: InputDecoration(
@@ -197,7 +265,6 @@ class _MyLoginPage extends State<MyLoginPage> {
             ),
             ButtonBar(
               children: <Widget>[
-                // TODO: Add a beveled rectangular border to CANCEL (103)
                 FlatButton(
                   child: Text('CANCEL'),
                   onPressed: () {
@@ -205,8 +272,6 @@ class _MyLoginPage extends State<MyLoginPage> {
                     _passwordController.clear();
                   },
                 ),
-                // TODO: Add an elevation to NEXT (103)
-                // TODO: Add a beveled rectangular border to NEXT (103)
                 RaisedButton(
                   child: Text('NEXT'),
                   onPressed: () {
@@ -214,7 +279,7 @@ class _MyLoginPage extends State<MyLoginPage> {
                       context,
                       MaterialPageRoute(builder: (context) => MyHomePage()),
                     );
-                    },
+                  },
                 ),
               ],
             ),
