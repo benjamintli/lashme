@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel;
+import 'package:page_transition/page_transition.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -76,7 +79,7 @@ class PlaceholderWidget extends StatelessWidget {
   }
 }
 
-class _lol extends State<lashFinder> {
+class _cards extends State<lashFinder> {
   ScrollController _controller;
 
   void initState() {
@@ -150,9 +153,25 @@ class _lol extends State<lashFinder> {
   }
 }
 
+class _calendar extends State<calendarDisplay> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: CalendarCarousel(
+
+      )
+    );
+  }
+}
+
+class calendarDisplay extends StatefulWidget {
+  @override
+  State createState() => _calendar();
+}
+
 class lashFinder extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _lol();
+  State<StatefulWidget> createState() => _cards();
 }
 
 class MyLoginPage extends StatefulWidget {
@@ -178,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool flag = true;
   void onTabTapped(int index) {
     setState(() {
-      _currentIndex = index;
+        _currentIndex = index;
     });
   }
 
@@ -186,9 +205,11 @@ class _MyHomePageState extends State<MyHomePage> {
     lashFinder(),
     PlaceholderWidget(Colors.deepOrange),
 //    PlaceholderWidget(Colors.green),
-    PlaceholderWidget(Colors.pink),
+    calendarDisplay(),
     PlaceholderWidget(Colors.blue)
   ];
+
+
 
   @override
   Widget build(BuildContext context) {
