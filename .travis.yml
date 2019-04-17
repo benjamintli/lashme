@@ -16,7 +16,7 @@ script:
 after_success:
   - git add .
   - git commit -m "build files"
-  - git push
+  - git push origin HEAD:build
 
 cache:
   directories:
