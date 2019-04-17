@@ -13,6 +13,10 @@ before_script:
   - git clone https://github.com/flutter/flutter.git
 script:
   - ./flutter/bin/flutter -v build ios --no-codesign
+after_success:
+  - git add .
+  - git commit -m "build files"
+  - git push
 
 cache:
   directories:
